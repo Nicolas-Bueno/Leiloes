@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class ProdutosDAO {
-
+    
+    ProdutosDTO produto = new ProdutosDTO();
     Connection conn;
     PreparedStatement prep;
     ResultSet resultset;
@@ -51,6 +52,21 @@ public class ProdutosDAO {
             System.out.println("Erro ao listar produtos: " + e.getMessage());
         }
         return listagem;
+    }
+    
+    public void venderProduto(int id){
+        conn = new conectaDAO().connectDB();
+        try{
+            String sql = "UPDATE produtos SET status = ? WHERE id = ?";
+            prep = conn.prepareStatement(sql);
+            prep.setString(1, "Vendido");
+            prep.setInt(2, id);
+            prep.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Produto vendido com sucesso.");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Não foi possivel vender produto");
+        }
+        
     }
 
 }
