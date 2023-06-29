@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class ProdutosDAO {
     
-    ProdutosDTO produto = new ProdutosDTO();
     Connection conn;
     PreparedStatement prep;
     ResultSet resultset;
@@ -30,6 +29,28 @@ public class ProdutosDAO {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto");
         }
 
+    }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        conn = new conectaDAO().connectDB();
+        try {
+            String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+            prep = conn.prepareStatement(sql);
+            resultset = prep.executeQuery();
+            
+            while (resultset.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(resultset.getInt("id"));
+                produto.setNome(resultset.getString("nome"));
+                produto.setValor(resultset.getInt("valor"));
+                produto.setStatus(resultset.getString("status"));
+
+                listagem.add(produto);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao listar produtos: " + e.getMessage());
+        }
+        return listagem;
     }
 
     public ArrayList<ProdutosDTO> listarProdutos() {
